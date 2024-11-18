@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hi Nettaaaaaaaaaaa</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8c8e7;
+            font-family: 'Arial', sans-serif;
+            color: #5d2b6e;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column; /* Susun vertikal */
+            text-align: center; /* Pusatkan teks */
+        }
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 5px;
+        }
+        .message {
+            font-size: 1.2rem;
+            color: #9b1f5a;
+            font-weight: normal; /* Hilangkan bold */
+        }
+        /* Media Query untuk Mobile */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            .message {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1 id="randomMessage"></h1>
+    <p id="message" class="message"></p>
+
+    <script>
+                const messages = [
+            "Hullaww Nettaaaaaaaaaaa",
+            "Hi Garneta Nadia Santosa",
+            "Haloo anak kecil private life",
+            "Hallooooooooooooooooooooo",
+            "Hillaw Pinky Gurl",
+            "Spesial banget nih"
+        ];
+
+        // Fungsi untuk mendapatkan pesan random per jam
+        function getRandomIndex() {
+            // Dapatkan jam dari waktu saat ini di zona WIB
+            const now = new Date();
+            const utc = now.getTime() + now.getTimezoneOffset() * 60000;
+            const wib = new Date(utc + 7 * 3600000);
+            const hour = wib.getHours();
+
+            // Gunakan jam sebagai seed untuk memilih pesan
+            const randomSeed = Math.sin(hour) * 10000; 
+            return Math.abs(Math.floor(randomSeed) % messages.length);
+        }
+
+        // Tampilkan pesan random di h1
+        function displayRandomMessage() {
+            const randomIndex = getRandomIndex();
+            const randomMessage = messages[randomIndex];
+            document.getElementById("randomMessage").textContent = randomMessage;
+        }
+
+        // Panggil fungsi untuk menampilkan pesan
+        displayRandomMessage();
+        
+        function getDayName(date) {
+            const days = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jum'at", "Sabtu"];
+            return days[date.getDay()];
+        }
+
+        function getWIBTime() {
+            const now = new Date();
+            // Konversi waktu sekarang ke zona waktu UTC+7 (WIB)
+            const utc = now.getTime() + now.getTimezoneOffset() * 60000;
+            const wib = new Date(utc + 7 * 3600000);
+            return wib;
+        }
+
+        function updateMessage() {
+            const wibTime = getWIBTime();
+            const hour = wibTime.getHours();
+            const dayName = getDayName(wibTime);
+            let message = "";
+
+            // Pesan untuk Kamis setelah jam 16:00 WIB
+            if (dayName === "Kamis" && hour > 16) {
+                message = `Semoga besok dihari Jum'at yang penuh keberkahan diberikan berkah yang melimpah, aamiin...`;
+            }
+            // Pesan untuk Jumat
+            else if (dayName === "Jum'at") {
+                message = `Semangat yaa buat ngejalanin hari ${dayName}nyaa<br>Semoga mendapat keberkahan aamiin aamiin`;
+            } 
+            //Pesan utk SEniN yg kocak
+            else if (dayName === "Minggu" && hour > 17) {
+                message = `Udah Senin lagi aja besok, semangatt yaa buat kamu`;
+            }
+            else if (hour >= 1 && hour <= 16) {
+                message = `Semangatt yaa buat ngejalanin hari ${dayName}nyaa`;
+            } else {
+                // Jika jam lebih dari 16 (setelah sore), tampilkan hari besok
+                const nextDay = new Date(wibTime);
+                nextDay.setDate(wibTime.getDate() + 1); // Menambahkan 1 hari
+                const nextDayName = getDayName(nextDay);
+                message = `Besok hari ${nextDayName}, semangaattt yaa buat besok`;
+            }
+
+            document.getElementById('message').innerHTML = message;
+        }
+
+        updateMessage();
+    </script>
+</body>
+</html>
