@@ -52,15 +52,28 @@
             "Yth. Nona Nettaaaaaaaaaaa"
         ];
 
-        // Hanya acak ketika jam 18
-        if (hour === 18) {
-            // Acak pesan
-            const randomSeed = Math.random() * 10000; 
-            return Math.abs(Math.floor(randomSeed) % messages.length);
-        } else {
-            // Jika bukan jam 6, kembalikan indeks default (misalnya indeks pertama)
-            return 0; // Atau indeks lain sesuai kebutuhan
+        let cachedIndex = null; // Menyimpan indeks yang diacak
+
+        function getRandomIndex() {
+            // Dapatkan jam dari waktu saat ini di zona WIB
+            const now = new Date();
+            const utc = now.getTime() + now.getTimezoneOffset() * 60000;
+            const wib = new Date(utc + 7 * 3600000);
+            const hour = wib.getHours();
+        
+            // Hanya acak saat jam 6 sore, simpan hasilnya
+            if (hour === 18 && cachedIndex === null) {
+                const randomSeed = Math.random() * 10000;
+                cachedIndex = Math.abs(Math.floor(randomSeed) % messages.length);
+            } else if (hour !== 18) {
+                // Reset cache jika di luar jam 6 sore
+                cachedIndex = null;
+            }
+        
+            // Kembalikan hasil yang diacak, atau default jika belum diacak
+            return cachedIndex !== null ? cachedIndex : 0;
         }
+
 
         // Tampilkan pesan random di h1
         function displayRandomMessage() {
