@@ -52,17 +52,14 @@
             "Yth. Nona Nettaaaaaaaaaaa"
         ];
 
-        // Fungsi untuk mendapatkan pesan random per jam
-        function getRandomIndex() {
-            // Dapatkan jam dari waktu saat ini di zona WIB
-            const now = new Date();
-            const utc = now.getTime() + now.getTimezoneOffset() * 60000;
-            const wib = new Date(utc + 7 * 3600000);
-            const hour = wib.getHours();
-
-            // Gunakan jam sebagai seed untuk memilih pesan
-            const randomSeed = Math.sin(hour) * 10000; 
+        // Hanya acak ketika jam 18
+        if (hour === 18) {
+            // Acak pesan
+            const randomSeed = Math.random() * 10000; 
             return Math.abs(Math.floor(randomSeed) % messages.length);
+        } else {
+            // Jika bukan jam 6, kembalikan indeks default (misalnya indeks pertama)
+            return 0; // Atau indeks lain sesuai kebutuhan
         }
 
         // Tampilkan pesan random di h1
